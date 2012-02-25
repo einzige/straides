@@ -1,0 +1,8 @@
+source :rubygems
+
+gem 'multi_json'
+gem 'rake'
+gem 'rspec'
+gem 'rails'
+gem 'rspec-rails'
+gem 'sqlite3'

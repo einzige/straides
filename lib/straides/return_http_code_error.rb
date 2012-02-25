@@ -10,5 +10,12 @@ module Straides
     def initialize(render_options)
       @render_options = render_options
     end
+
+    # Checks if error options contain any templates assigned to it.
+    #
+    # @return [ true, false ]
+    def has_template?
+      (render_options.keys & [:file, :text, :json, :nothing]).any?
+    end
   end
 end
