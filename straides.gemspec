@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = Straides::VERSION
   s.authors     = ["Kevin Goslar"]
   s.email       = ["kevin.goslar@gmail.com"]
-  s.homepage    = "TODO"
+  s.homepage    = "http://github.com/kevgo/straides"
   s.summary     = "HTTP Status codes for Rails"
   s.description = "A more convenient way to return different HTTP status codes from Rails."
 
