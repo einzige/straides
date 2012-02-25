@@ -1,4 +1,14 @@
 Dummy::Application.routes.draw do
+  
+  resources :test, 
+            only: [] do
+    collection do
+      get :works
+      get :error_404
+      get :error_400
+    end
+  end
+  
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
