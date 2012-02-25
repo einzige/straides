@@ -25,11 +25,13 @@ Straides returns reasonable default responses dependent on the request format.
 * If the request returns JSON, it leaves the response body empty by default.
 
 These behaviors can be overridden by providing the call to `error` with the same parameters 
-as you would give to `render` in Rails.
+as you would give to [render](http://apidock.com/rails/ActionController/Base/render) in Rails.
 
     # Provide a custom error message in the response body.
     error 401, :text => 'Please log in first.'
     
     # Render a different file in the response body.
     error 404, :file => 'public/custom_404.html'
-
+    
+    # Render a custom JSON response.
+    error 401, :json => { :code => 401, :message => 'Please log in first.' }
