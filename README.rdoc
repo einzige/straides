@@ -1,3 +1,16 @@
 = Straides
+Does everything you need.
 
+== Usage
+  class MySuperPuperController < ActionController::Base
+    include Strades
+  end
+
+Somewhere in your controller:
+
+  def load_entry!
+    @entry = Entry.find(params[:id]) or error 404
+  end
+
+== Agreement
 This project rocks and uses MIT-LICENSE.
