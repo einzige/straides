@@ -1,7 +1,8 @@
-require 'dummy/spec/spec_helper'
+require 'spec_helper'
 
-describe 'test' do
+describe Straides do
   it 'works' do
     puts "XXXXXX"
+    true.should be_true
   end
 end

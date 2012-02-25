@@ -1,5 +1,6 @@
 require 'straides/return_http_code_error'
 require 'straides/version'
+require 'active_support/concern'
 
 module Straides
   extend ActiveSupport::Concern
