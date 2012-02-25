@@ -1,37 +1,37 @@
-require 'return_http_code_error'
-require 'active_record'
+require 'straides/return_http_code_error'
+require 'straides/version'
+require 'active_support/concern'
 
-class ApplicationController < ActionController::Base
-  
-  rescue_from(ReturnHttpCodeError) { |error| show_error(error) }
+module Straides
+  extend ActiveSupport::Concern
 
-  
-  protected
+  included do
+    rescue_from ReturnHttpCodeError, :with => :show_error
 
-  # Makes the current action abort and return an HTTP error.
-  def error status, render_options = {}
-    render_options[:status] = status
-    raise ReturnHttpCodeError, render_options
-  end
+    protected
 
+    # Makes the current action abort and return an HTTP error.
+    #
+    # @param [ Integer ] status
+    # @param [ Hash ] render_options
+    def error(status, render_options = {})
+      render_options[:status] = status
+      raise ReturnHttpCodeError, render_options
+    end
 
-  private
-  
-  # Outputs the given error to the client.
-  def show_error error
-    respond_to do |format|
-      format.html do
-        if (error.render_options.keys & [:file, :text, :json, :nothing]).empty?
-          error.render_options[:file] = "public/#{error.render_options[:status]}.html"
+    # Outputs the given error to the client.
+    #
+    # @param [ Straides::ReturnHttpCodeError ] error
+    def show_error(error)
+      unless error.has_template?
+        if request.send(:format).html?
+          error.render_options[:file] = "public/#{error.render_options[:status] || 'error'}"
+          error.render_options[:formats] = [:html]
+        else
+          error.render_options[:nothing] = true
         end
-        render error.render_options
       end
-      format.json do
-        if (error.render_options.keys & [:file, :text, :json, :nothing]).empty?
-          error.render_options[:text] = ''
-        end
-        render error.render_options
-      end
+      render error.render_options
     end
   end
 end
