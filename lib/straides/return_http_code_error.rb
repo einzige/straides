@@ -7,7 +7,7 @@ module Straides
     # @constructor
     #
     # @param [ Hash ] render_options
-    def initialize(render_options)
+    def initialize(render_options = {})
       @render_options = render_options
     end
 
