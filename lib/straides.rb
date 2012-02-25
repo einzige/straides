@@ -1,36 +1,39 @@
-require 'return_http_code_error'
-require 'active_record'
+require 'straides/return_http_code_error'
+require 'straides/version'
 
-class ApplicationController < ActionController::Base
-  
-  rescue_from(ReturnHttpCodeError) { |error| show_error(error) }
+module Straides
+  def self.included(base)
+    class << base
+      rescue_from ReturnHttpCodeError, &show_error
 
-  
-  protected
+      protected
 
-  # Makes the current action abort and return an HTTP error.
-  def error status, render_options = {}
-    render_options[:status] = status
-    raise ReturnHttpCodeError, render_options
-  end
-
-
-  private
-  
-  # Outputs the given error to the client.
-  def show_error error
-    respond_to do |format|
-      format.html do
-        if (error.render_options.keys & [:file, :text, :json, :nothing]).empty?
-          error.render_options[:file] = "public/#{error.render_options[:status]}.html"
-        end
-        render error.render_options
+      # Makes the current action abort and return an HTTP error.
+      #
+      # @param [ Integer ] status
+      # @param [ Hash ] render_options
+      def error(status, render_options = {})
+        render_options[:status] = status
+        raise ReturnHttpCodeError, render_options
       end
-      format.json do
-        if (error.render_options.keys & [:file, :text, :json, :nothing]).empty?
-          error.render_options[:text] = ''
+
+      private
+
+      # Outputs the given error to the client.
+      #
+      # @param [ Straides::ReturnHttpCodeError ] error
+      def show_error error
+        respond_to do |format|
+          if (error.render_options.keys & [:file, :text, :json, :nothing]).empty?
+            format.json do
+              error.render_options[:text] = '' # NOTE(SZ): :nothing => true?
+            end
+            format.html do
+              error.render_options[:file] = "public/#{error.render_options[:status]}.html"
+            end
+          end
+          render error.render_options
         end
-        render error.render_options
       end
     end
   end
